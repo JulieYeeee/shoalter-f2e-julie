@@ -1,10 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit'
-import { searchResultReducer } from './features/searchResultSlice'
 import { SEARCH_RESULT } from './constants'
+import { searchResultReducer } from './features/searchResultSlice'
+
 export const makeStore = () => {
-    return configureStore({
-        reducer: {
-            [SEARCH_RESULT]: searchResultReducer,
-        },
-    })
+  return configureStore({
+    reducer: {
+      [SEARCH_RESULT]: searchResultReducer,
+    },
+  })
 }
