@@ -40,3 +40,12 @@ a {
     color-scheme: dark;
   }
 }
+
+/*TODO:改成局部處理*/
+.ant-row {
+  flex-wrap: nowrap;
+}
+
+.ant-card-bordered {
+  border: none
+}
