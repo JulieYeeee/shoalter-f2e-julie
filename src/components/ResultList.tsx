@@ -10,11 +10,13 @@ interface SearchResultItem {
   'im:image': { label: string }[]
   'im:name': { label: string }
   category: { attributes: { label: string } }
+  id: { attributes: { 'im:id': string } }
 }
 
 function ResultList() {
   const { result } = useAppSelector(searchResultSelector)
   const dispatch = useAppDispatch()
+  const isLoading = result.length === 0
 
   useEffect(() => {
     dispatch(getSearchResultThunk())
@@ -24,9 +26,15 @@ function ResultList() {
     <div>
       <h1>Result List</h1>
       <List
+        pagination={{
+          position: 'bottom',
+          align: 'center',
+          pageSize: 10,
+        }}
         dataSource={result}
+        loading={isLoading}
         renderItem={(item: SearchResultItem) => (
-          <List.Item>
+          <List.Item key={item?.id.attributes['im:id']}>
             <List.Item.Meta
               avatar={
                 <Avatar

@@ -1,6 +1,7 @@
 'use client'
 import { useEffect } from 'react'
 import { List } from 'antd'
+import styled from 'styled-components'
 import RowCard from '@/components/widgets/RowCard'
 import {
   recommendationSelector,
@@ -8,42 +9,37 @@ import {
 } from '@/lib/features/searchResultSlice'
 import { useAppDispatch, useAppSelector } from '@/lib/hooks'
 
-interface Item {
-  'im:image': { label: string }[]
-  'im:name': { label: string }
-  category: { attributes: { label: string } }
-}
+const Wrapper = styled.div`
+  width: 100%;
+  overflow-x: auto;
+`
+
+const StyledList = styled(List)`
+  /* 以下設定推薦序列方向及主要容器寬度 */
+  .ant-list-items {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+  }
+`
 
 function Recommendation() {
   const dispatch = useAppDispatch()
   const { result } = useAppSelector(recommendationSelector)
-
+  const isLoading = result.length === 0
   useEffect(() => {
     dispatch(getRecommendationThunk())
   }, [dispatch])
 
-  // TODO:可能不用 List component
   return (
     <div>
-      <h1>Recommendation</h1>
-      <div style={{ width: '100vw', overflowX: 'auto' }}>
-        <List
-          // style={{ width: "fit-content" }}
+      <h1>推薦</h1>
+      <Wrapper>
+        <StyledList
+          loading={isLoading}
           dataSource={result}
-          grid={
-            {
-              // gutter: 1,
-              // column: 5,
-              // xs: 1,
-              // sm: 2,
-              // md: 4,
-              // lg: 4,
-              // xl: 6,
-              // xxl: 3,
-            }
-          }
-          renderItem={(item: Item) => (
-            <List.Item style={{ width: '200px' }}>
+          renderItem={(item) => (
+            <List.Item>
               <RowCard
                 src={item?.['im:image'][2]?.label}
                 title={item['im:name'].label}
@@ -52,7 +48,7 @@ function Recommendation() {
             </List.Item>
           )}
         />
-      </div>
+      </Wrapper>
     </div>
   )
 }
