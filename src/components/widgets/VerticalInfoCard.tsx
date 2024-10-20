@@ -1,5 +1,11 @@
 import { Avatar, Card } from 'antd'
-import styled from 'styled-components'
+import { styled } from 'styled-components'
+
+interface VerticalInfoCardProps {
+  src: string
+  title: string
+  description: string
+}
 
 const StyledCard = styled(Card)`
   /* 以下設定推薦卡片寬度 */
@@ -33,13 +39,7 @@ const StyledCard = styled(Card)`
   }
 `
 
-interface RowCardProps {
-  src: string
-  title: string
-  description: string
-}
-
-function RowCard({ src, title, description }: RowCardProps) {
+function VerticalInfoCard({ src, title, description }: VerticalInfoCardProps) {
   return (
     <StyledCard
       cover={<Avatar shape="square" size={64} alt={title} src={src} />}
@@ -49,4 +49,4 @@ function RowCard({ src, title, description }: RowCardProps) {
   )
 }
 
-export default RowCard
+export default VerticalInfoCard

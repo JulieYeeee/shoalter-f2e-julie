@@ -1,13 +1,32 @@
 'use client'
 import { useEffect } from 'react'
 import { List } from 'antd'
-import styled from 'styled-components'
-import RowCard from '@/components/widgets/RowCard'
+import { styled } from 'styled-components'
+import VerticalInfoCard from '@/components/widgets/VerticalInfoCard'
 import {
   recommendationSelector,
   getRecommendationThunk,
 } from '@/lib/features/searchResultSlice'
 import { useAppDispatch, useAppSelector } from '@/lib/hooks'
+
+type Item = {
+  'im:name': {
+    label: string
+  }
+  'im:image': {
+    label: string
+  }[]
+  category: {
+    attributes: {
+      label: string
+    }
+  }
+  'im:contentType': {
+    attributes: {
+      label: string
+    }
+  }
+}
 
 const Wrapper = styled.div`
   width: 100%;
@@ -21,7 +40,7 @@ const StyledList = styled(List)`
     display: flex;
     flex-direction: row;
   }
-`
+` as typeof List
 
 function Recommendation() {
   const dispatch = useAppDispatch()
@@ -38,12 +57,12 @@ function Recommendation() {
         <StyledList
           loading={isLoading}
           dataSource={result}
-          renderItem={(item) => (
+          renderItem={(item: Item) => (
             <List.Item>
-              <RowCard
+              <VerticalInfoCard
                 src={item?.['im:image'][2]?.label}
-                title={item['im:name'].label}
-                description={item.category.attributes.label}
+                title={item?.['im:name'].label}
+                description={item?.category.attributes.label}
               />
             </List.Item>
           )}

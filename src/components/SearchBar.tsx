@@ -1,15 +1,20 @@
 import { useEffect, useState } from 'react'
 import { SearchOutlined } from '@ant-design/icons'
 import { Form, Input } from 'antd'
-import styled from 'styled-components'
+import type { InputProps } from 'antd/es/input'
+import { styled } from 'styled-components'
 import { updateKeyword } from '@/lib/features/searchResultSlice'
 import { useAppDispatch } from '@/lib/hooks'
 
+interface StyledInputProps extends InputProps {
+  $isSearch: boolean
+}
+
 const StyledFormItem = styled(Form.Item)`
   margin-bottom: 0;
-`
+` as typeof Form.Item
 
-const StyledInput = styled(Input)<{ $isSearch: boolean }>`
+const StyledInput = styled(Input)<StyledInputProps>`
   background-color: #d1d1d1;
   &::placeholder {
     color: red;
@@ -25,7 +30,7 @@ const StyledInput = styled(Input)<{ $isSearch: boolean }>`
     color: #bfbfbf;
     visibility: ${(props) => (props.$isSearch ? 'hidden' : 'visible')};
   }
-`
+` as React.FC<StyledInputProps>
 
 function SearchBar() {
   const dispatch = useAppDispatch()

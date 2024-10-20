@@ -6,7 +6,7 @@ import {
 } from '@/lib/features/searchResultSlice'
 import { useAppSelector, useAppDispatch } from '@/lib/hooks'
 
-interface SearchResultItem {
+interface Item {
   'im:image': { label: string }[]
   'im:name': { label: string }
   category: { attributes: { label: string } }
@@ -31,7 +31,7 @@ function ResultList() {
       }}
       dataSource={result}
       loading={isLoading}
-      renderItem={(item: SearchResultItem) => (
+      renderItem={(item: Item) => (
         <List.Item key={item?.id.attributes['im:id']}>
           <List.Item.Meta
             avatar={

@@ -1,5 +1,5 @@
 'use client'
-import styled from 'styled-components'
+import { styled } from 'styled-components'
 import Recommendation from '@/components/Recommendation'
 import ResultList from '@/components/ResultList'
 import SearchBar from '@/components/SearchBar'
@@ -11,6 +11,7 @@ const Wrapper = styled.div`
   display: flex;
   justify-content: center;
 `
+
 const MainConatiner = styled.div`
   width: 50%;
 `
