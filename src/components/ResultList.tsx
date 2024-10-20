@@ -23,33 +23,30 @@ function ResultList() {
   }, [dispatch])
 
   return (
-    <div>
-      <h1>Result List</h1>
-      <List
-        pagination={{
-          position: 'bottom',
-          align: 'center',
-          pageSize: 10,
-        }}
-        dataSource={result}
-        loading={isLoading}
-        renderItem={(item: SearchResultItem) => (
-          <List.Item key={item?.id.attributes['im:id']}>
-            <List.Item.Meta
-              avatar={
-                <Avatar
-                  src={item?.['im:image'][0]?.label}
-                  size={64}
-                  alt={item['im:name'].label}
-                />
-              }
-              title={item['im:name'].label}
-              description={item.category.attributes.label}
-            />
-          </List.Item>
-        )}
-      />
-    </div>
+    <List
+      pagination={{
+        position: 'bottom',
+        align: 'center',
+        pageSize: 10,
+      }}
+      dataSource={result}
+      loading={isLoading}
+      renderItem={(item: SearchResultItem) => (
+        <List.Item key={item?.id.attributes['im:id']}>
+          <List.Item.Meta
+            avatar={
+              <Avatar
+                src={item?.['im:image'][0]?.label}
+                size={64}
+                alt={item['im:name'].label}
+              />
+            }
+            title={item['im:name'].label}
+            description={item.category.attributes.label}
+          />
+        </List.Item>
+      )}
+    />
   )
 }
 

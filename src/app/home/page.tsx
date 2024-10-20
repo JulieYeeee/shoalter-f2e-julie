@@ -11,6 +11,10 @@ const Wrapper = styled.div`
   display: flex;
   justify-content: center;
 `
+const MainConatiner = styled.div`
+  width: 50%;
+`
+
 const StickyZone = styled.div`
   position: sticky;
   top: 0;
@@ -24,13 +28,13 @@ const StickyZone = styled.div`
 function Home() {
   return (
     <Wrapper>
-      <div>
+      <MainConatiner>
         <StickyZone>
           <SearchBar />
         </StickyZone>
         <Recommendation />
         <ResultList />
-      </div>
+      </MainConatiner>
     </Wrapper>
   )
 }
