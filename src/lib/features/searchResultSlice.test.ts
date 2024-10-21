@@ -106,7 +106,7 @@ describe('searchResultSlice', () => {
       const result = searchResultSelector(mockStore)
       expect(result).toEqual({ isKeyword: false, result: [] })
     })
-    it('已取得 API 資料及 keyword，應回傳實際結果與關鍵字 - searchResultSelector', () => {
+    it('已取得 API 資料及 keyword，應回傳帶有 order 的結果與關鍵字 - searchResultSelector', () => {
       mockStore[SEARCH_RESULT].searchResultRsp = {
         author: {
           name: {
@@ -150,7 +150,10 @@ describe('searchResultSlice', () => {
       mockStore[SEARCH_RESULT].keyword = 'MockLabel' //關鍵字：符合指定欄位內容
 
       const result = searchResultSelector(mockStore)
-      expect(result).toEqual({ isKeyword: true, result: [mockEntry] })
+      expect(result).toEqual({
+        isKeyword: true,
+        result: [{ ...mockEntry, order: '1' }],
+      })
     })
     it('未取得 API 資料，應回傳預設空陣列推薦結果 - recommendationSelector', () => {
       const result = recommendationSelector(mockStore)
