@@ -3,12 +3,12 @@
   --foreground: #171717;
 }
 
-@media (prefers-color-scheme: dark) {
+/* @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
     --foreground: #ededed;
   }
-}
+} */
 
 html,
 body {
@@ -39,4 +39,13 @@ a {
   html {
     color-scheme: dark;
   }
+}
+
+/*TODO:改成局部處理*/
+.ant-row {
+  flex-wrap: nowrap;
+}
+
+.ant-card-bordered {
+  border: none
 }
