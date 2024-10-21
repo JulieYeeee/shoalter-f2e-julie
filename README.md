@@ -1,5 +1,7 @@
 # APP Store模擬
 
+快速線上瀏覽：[https://julieyeeee.github.io/shoalter-f2e-julie/](https://julieyeeee.github.io/shoalter-f2e-julie/)
+
 ## 專案描述
 
 這是一個仿製 APP Store 的專案，提供簡易的搜尋互動功能。使用者可以體驗類似 APP Store 的界面和功能。
