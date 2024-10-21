@@ -39,12 +39,20 @@ function SearchBar() {
   const [isFocused, setIsFocused] = useState(false)
 
   useEffect(() => {
-    if (keyword && keyword.trim()) {
-      dispatch(updateKeyword(keyword))
-    } else {
-      dispatch(updateKeyword(''))
+    // debounce 處理，避免頻繁更新
+    const handler = setTimeout(() => {
+      if (keyword && keyword.trim()) {
+        dispatch(updateKeyword(keyword))
+      } else {
+        dispatch(updateKeyword(''))
+      }
+    }, 300)
+
+    // 清除前一個 timeout，防止多次觸發
+    return () => {
+      clearTimeout(handler)
     }
-  }, [dispatch, keyword])
+  }, [keyword, dispatch])
 
   return (
     <Form form={form} layout="vertical" autoComplete="off">
