@@ -26,6 +26,11 @@ type Item = {
       label: string
     }
   }
+  id: {
+    attributes: {
+      'im:id': string
+    }
+  }
 }
 
 const Wrapper = styled.div`
@@ -58,7 +63,7 @@ function Recommendation() {
           loading={isLoading}
           dataSource={result}
           renderItem={(item: Item) => (
-            <List.Item>
+            <List.Item key={item.id.attributes['im:id']}>
               <VerticalInfoCard
                 src={item?.['im:image'][2]?.label}
                 title={item?.['im:name'].label}

@@ -80,8 +80,12 @@ const searchResultSelector = createSelector(
   (state) => state[SEARCH_RESULT]?.searchResultRsp?.entry,
   (state) => state[SEARCH_RESULT]?.keyword,
   (result: Entry[], keyword: string) => {
+    const addNumberToEntry = (arr: Entry[]) => {
+      return arr?.map((item, index) => ({ ...item, order: `${index + 1}` }))
+    }
     if (!keyword) {
-      return { isKeyword: false, result: result || [] }
+      const numberedEntries = addNumberToEntry(result)
+      return { isKeyword: false, result: numberedEntries || [] }
     }
 
     const lowercasedKeyword = keyword.toLowerCase()
@@ -94,7 +98,9 @@ const searchResultSelector = createSelector(
         matchesKeyword(item.summary.label) ||
         matchesKeyword(item.title.label)
     )
-    return { isKeyword: true, result: filteredEntries }
+
+    const numberedEntries = addNumberToEntry(filteredEntries)
+    return { isKeyword: true, result: numberedEntries }
   }
 )
 
