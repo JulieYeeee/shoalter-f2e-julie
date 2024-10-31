@@ -90,6 +90,19 @@ interface AppLookupResult {
   id: Label
 }
 
+interface RatingsResult {
+  resultCount: number
+  results:
+    | {
+        averageUserRating: number
+        userRatingCount: number
+        version: string
+        releaseNotes: string
+        currentVersionReleaseDate: string
+      }[]
+    | null
+}
+
 export type {
   Author,
   Entry,
@@ -103,4 +116,5 @@ export type {
   ReleaseDate,
   Link,
   AppLookupResult,
+  RatingsResult,
 }
