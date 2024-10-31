@@ -10,7 +10,10 @@
 
 針對前測作業缺漏及面試時的提問進行優化：
 
-- 補上評分功能顯示 （註：部分 APP 無法取的資料，如遇此情形目前採 default 1 顆星/0筆 顯示）
+- 補上評分功能顯示
+  - 註1：在 local 端測試時出現部分 APP ID 打 API 有 CORS 問題，部署至 Github Page 時則發生全部 ID 都是 CORS Error，目前我對 CORS 的理解需從後端設置允許來源故無處理此問題）
+  - 註2：本地端測試的畫面：<img width="1469" alt="image" src="https://github.com/user-attachments/assets/3e6bbf6e-71dd-4ee3-88e5-2976bd17743b">
+  - 註3：針對取無資料的問題，因此元件內預設無資料時，顯示 default 1 顆星/0筆 
 - 評分 API 處理機制：
   - 由於每個 APP 評分需獨立打 API 取得，設想一次打 100 筆會讓使用者等待回應較久或其他效能問題因此採分批取得
   - 分批取得機制：透過 scroll 的 lazy loading 觸發，當需載入新的 10 筆紀錄時，才打 API 取得評分
