@@ -1,10 +1,14 @@
-import { useEffect, useState, useRef } from 'react'
+import { useEffect, useRef } from 'react'
 import { List, Avatar } from 'antd'
 import { styled } from 'styled-components'
+import RatingDescription from '@/components/widgets/RatingDescription'
 import {
   getSearchResultThunk,
-  searchResultSelector,
+  getAppRatings,
+  updateCurrentBatch,
+  resultWithRatingSelector,
 } from '@/lib/features/searchResultSlice'
+
 import { useAppSelector, useAppDispatch } from '@/lib/hooks'
 
 interface Item {
@@ -12,7 +16,9 @@ interface Item {
   'im:name': { label: string }
   category: { attributes: { label: string } }
   id: { attributes: { 'im:id': string } }
-  order: string
+  order?: string
+  rating: number
+  ratingCount: number
 }
 
 const StyledList = styled(List)`
@@ -30,22 +36,25 @@ const StyledNumber = styled.p`
 
 function ResultList() {
   const dispatch = useAppDispatch()
-  const { result } = useAppSelector(searchResultSelector)
-  const [visibleItems, setVisibleItems] = useState<Item[]>([])
-  const [currentBatch, setCurrentBatch] = useState(1)
+  const { result, isNoResult, currentBatch } = useAppSelector(
+    resultWithRatingSelector
+  )
   const listRef = useRef<HTMLDivElement>(null)
   const batchSize = 10 // 每次加載 10 筆資料
-  const isLoading = result.length === 0
+  const isLoading = isNoResult ? false : result.length === 0
 
   useEffect(() => {
-    dispatch(getSearchResultThunk())
+    const getInitData = async () => {
+      await dispatch(getSearchResultThunk())
+      await dispatch(getAppRatings(1))
+    }
+    getInitData()
   }, [dispatch])
 
-  // 更新當前顯示的資料，依據當前 batch 加載
+  // 依照當前載入的 batch 取得 ratings
   useEffect(() => {
-    const nextBatch = result.slice(0, currentBatch * batchSize)
-    setVisibleItems(nextBatch)
-  }, [result, currentBatch])
+    dispatch(getAppRatings(currentBatch))
+  }, [currentBatch, dispatch])
 
   useEffect(() => {
     const listElement = listRef.current
@@ -53,25 +62,22 @@ function ResultList() {
       const handleScroll = () => {
         const userViewHeight = listElement.scrollTop + listElement.clientHeight
         const containerScrollHeight = listElement.scrollHeight
-        const hasMoreApps = currentBatch * batchSize < result.length
-
+        const hasMoreApps = currentBatch * batchSize <= result.length
         if (userViewHeight >= containerScrollHeight && hasMoreApps) {
-          setCurrentBatch(currentBatch + 1)
+          dispatch(updateCurrentBatch(currentBatch + 1))
         }
       }
-
       listElement.addEventListener('scroll', handleScroll)
-
       return () => {
         listElement.removeEventListener('scroll', handleScroll)
       }
     }
-  }, [currentBatch, result.length])
+  }, [currentBatch, dispatch, result.length])
 
   return (
     <StyledList
       ref={listRef}
-      dataSource={visibleItems}
+      dataSource={result}
       loading={isLoading}
       renderItem={(item: Item) => (
         <List.Item key={item?.id.attributes['im:id']}>
@@ -81,11 +87,17 @@ function ResultList() {
               <Avatar
                 src={item?.['im:image'][0]?.label}
                 size={64}
-                alt={item['im:name'].label}
+                alt={item?.['im:name'].label}
               />
             }
-            title={item['im:name'].label}
-            description={item.category.attributes.label}
+            title={item?.['im:name'].label}
+            description={
+              <RatingDescription
+                rating={item?.rating || 1}
+                ratingCount={item?.ratingCount || 0}
+                description={item?.category.attributes.label}
+              />
+            }
           />
         </List.Item>
       )}

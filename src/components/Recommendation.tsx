@@ -49,8 +49,8 @@ const StyledList = styled(List)`
 
 function Recommendation() {
   const dispatch = useAppDispatch()
-  const { result } = useAppSelector(recommendationSelector)
-  const isLoading = result.length === 0
+  const { result, isNoResult } = useAppSelector(recommendationSelector)
+  const isLoading = isNoResult ? false : result.length === 0
   useEffect(() => {
     dispatch(getRecommendationThunk())
   }, [dispatch])
