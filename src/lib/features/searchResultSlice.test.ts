@@ -127,7 +127,7 @@ describe('searchResultSlice', () => {
     })
     it('未取得 API 資料及 keyword，應回傳預設空陣列結果與空字串關鍵字 - searchResultSelector', () => {
       const result = searchResultSelector(mockStore)
-      expect(result).toEqual({ isKeyword: false, result: [] })
+      expect(result).toEqual({ isKeyword: false, result: undefined })
     })
     it('已取得 API 資料及 keyword，應回傳帶有 order 的結果與關鍵字 - searchResultSelector', () => {
       mockStore[SEARCH_RESULT].searchResultRsp = {
@@ -180,7 +180,7 @@ describe('searchResultSlice', () => {
     })
     it('未取得 API 資料，應回傳預設空陣列推薦結果 - recommendationSelector', () => {
       const result = recommendationSelector(mockStore)
-      expect(result).toEqual({ result: [], isNoResult: true })
+      expect(result).toEqual({ result: undefined, isNoResult: false })
     })
     it('已取得 API 資料，應回傳實際推薦結果 - recommendationSelector', () => {
       mockStore[SEARCH_RESULT].recommendationRsp = {
@@ -232,8 +232,8 @@ describe('searchResultSlice', () => {
     it('未取得 Ratings API 資料應回傳空陣列及其他預設資料 - resultWithRatingSelector', () => {
       const result = resultWithRatingSelector(mockStore)
       expect(result).toEqual({
-        result: [],
-        isNoResult: true,
+        result: undefined,
+        isNoResult: false,
         isKeyword: false,
         currentBatch: 1,
       })

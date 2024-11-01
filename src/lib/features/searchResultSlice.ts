@@ -123,15 +123,15 @@ const searchResultSlice = createSlice({
 })
 
 const searchResultSelector = createSelector(
-  (state) => state[SEARCH_RESULT]?.searchResultRsp?.entry || [],
-  (state) => state[SEARCH_RESULT]?.keyword || '',
+  (state) => state[SEARCH_RESULT]?.searchResultRsp?.entry,
+  (state) => state[SEARCH_RESULT]?.keyword,
   (result: Entry[], keyword: string) => {
     const addNumberToEntry = (arr: Entry[]) => {
       return arr?.map((item, index) => ({ ...item, order: `${index + 1}` }))
     }
     if (!keyword) {
       const numberedEntries = addNumberToEntry(result)
-      return { isKeyword: false, result: numberedEntries || [] }
+      return { isKeyword: false, result: numberedEntries }
     }
 
     const lowercasedKeyword = keyword.toLowerCase()
@@ -152,9 +152,7 @@ const searchResultSelector = createSelector(
 )
 
 const resultWithRatingSelector = createSelector(
-  (state) => {
-    return state[SEARCH_RESULT]?.ratingsRsp || []
-  },
+  (state) => state[SEARCH_RESULT]?.ratingsRsp,
   (state) => state[SEARCH_RESULT]?.currentBatch,
   searchResultSelector,
   (
@@ -162,7 +160,7 @@ const resultWithRatingSelector = createSelector(
     currentBatch,
     { isKeyword, result: searchResult }: { isKeyword: boolean; result: Entry[] }
   ) => {
-    const result = searchResult.map((item, idx) => {
+    const result = searchResult?.map((item, idx) => {
       return {
         ...item,
         rating: ratingsRsp[idx]?.results?.[0]?.averageUserRating || null,
@@ -170,11 +168,11 @@ const resultWithRatingSelector = createSelector(
       }
     })
     /* 根據 currentBatch 更新 result */
-    const nextBatch = result.slice(0, currentBatch * 10)
+    const nextBatch = result?.slice(0, currentBatch * 10)
 
     return {
       result: nextBatch,
-      isNoResult: nextBatch.length === 0,
+      isNoResult: Array.isArray(nextBatch) && nextBatch.length === 0,
       isKeyword,
       currentBatch,
     }
@@ -182,7 +180,7 @@ const resultWithRatingSelector = createSelector(
 )
 
 const recommendationSelector = createSelector(
-  (state) => state[SEARCH_RESULT]?.recommendationRsp?.entry || [],
+  (state) => state[SEARCH_RESULT]?.recommendationRsp?.entry,
   resultWithRatingSelector,
   (
     recommendation: Entry[],
@@ -192,7 +190,9 @@ const recommendationSelector = createSelector(
     }: { isKeyword: boolean; isNoResult: boolean; result: Entry[] }
   ) => {
     const result = isKeyword ? searchResult : recommendation
-    const isNoResult = result.length === 0
+    const isNoResult = isKeyword
+      ? Array.isArray(searchResult) && searchResult.length === 0
+      : Array.isArray(recommendation) && recommendation.length === 0
     return { result, isNoResult }
   }
 )

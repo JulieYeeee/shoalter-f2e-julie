@@ -41,7 +41,7 @@ function ResultList() {
   )
   const listRef = useRef<HTMLDivElement>(null)
   const batchSize = 10 // 每次加載 10 筆資料
-  const isLoading = isNoResult ? false : result.length === 0
+  const isLoading = isNoResult ? false : !Array.isArray(result)
 
   useEffect(() => {
     const getInitData = async () => {
@@ -58,7 +58,7 @@ function ResultList() {
 
   useEffect(() => {
     const listElement = listRef.current
-    if (listElement) {
+    if (listElement && result) {
       const handleScroll = () => {
         const userViewHeight = listElement.scrollTop + listElement.clientHeight
         const containerScrollHeight = listElement.scrollHeight
@@ -72,7 +72,7 @@ function ResultList() {
         listElement.removeEventListener('scroll', handleScroll)
       }
     }
-  }, [currentBatch, dispatch, result.length])
+  }, [currentBatch, dispatch, result])
 
   return (
     <StyledList
